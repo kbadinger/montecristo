@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Count of Monte Cristo — Companion Reader</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#0f0f13;color:#e0ddd5;min-height:100vh;padding:1.5rem 1.5rem 4rem}
+
+  h1{font-family:'Playfair Display',serif;font-size:2.2rem;text-align:center;margin-bottom:.3rem;background:linear-gradient(135deg,#d4af37,#f5e6a3,#d4af37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px}
+  .subtitle{text-align:center;font-size:.9rem;color:#888;margin-bottom:1rem;font-style:italic;font-family:'Playfair Display',serif}
+
+  /* GLOBAL READER CHAPTER */
+  .global-ch{max-width:600px;margin:0 auto 1.2rem;background:linear-gradient(145deg,#1a1a22,#16161e);border:1px solid rgba(212,175,55,.25);border-radius:14px;padding:1rem 1.5rem;text-align:center}
+  .global-ch-label{font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:#58d68d;margin-bottom:.5rem;font-weight:600}
+  .global-ch-row{display:flex;align-items:center;gap:1rem;justify-content:center}
+  .global-ch-row button{background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);color:#d4af37;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'Inter',sans-serif}
+  .global-ch-row button:hover{background:rgba(212,175,55,.3)}
+  .global-ch-num{font-family:'Playfair Display',serif;font-size:2.5rem;color:#d4af37;min-width:60px;text-align:center;font-weight:700}
+  .global-ch-title{font-family:'Playfair Display',serif;font-size:.8rem;color:#888;font-style:italic;margin-top:.3rem}
+  .global-pips{display:flex;gap:2px;margin-top:.6rem;justify-content:center;flex-wrap:wrap}
+  .global-pip{width:14px;height:14px;border-radius:3px;cursor:pointer;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);transition:all .15s}
+  .global-pip:hover{background:rgba(212,175,55,.2);border-color:rgba(212,175,55,.4)}
+  .global-pip.active{background:rgba(212,175,55,.35);border-color:#d4af37}
+  .global-pip.major{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.2)}
+
+  /* VIEW TOGGLE */
+  .view-toggle{display:flex;justify-content:center;gap:0;margin-bottom:1.5rem;background:rgba(255,255,255,.03);border-radius:12px;padding:4px;max-width:520px;margin-left:auto;margin-right:auto;border:1px solid rgba(255,255,255,.08)}
+  .view-btn{flex:1;background:0;border:0;color:#777;padding:.55rem .6rem;border-radius:10px;cursor:pointer;font-size:.8rem;font-family:'Inter',sans-serif;font-weight:500;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:.3rem}
+  .view-btn:hover{color:#bbb}
+  .view-btn.active{background:rgba(212,175,55,.15);color:#d4af37;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  .view-btn svg{width:14px;height:14px}
+  .view-section{display:none}.view-section.active{display:block}
+
+  /* CHAPTER EXPLORER */
+  .ch-explorer{max-width:900px;margin:0 auto}
+  .ch-slider-wrap{background:linear-gradient(145deg,#1a1a22,#16161e);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1rem 1.5rem;margin-bottom:1.2rem;text-align:center}
+  .ch-slider-label{font-family:'Playfair Display',serif;font-size:.9rem;color:#d4af37;margin-bottom:.5rem}
+  .ch-slider-row{display:flex;align-items:center;gap:.8rem;justify-content:center}
+  .ch-slider-row button{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);color:#d4af37;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .ch-slider-row button:hover{background:rgba(212,175,55,.25)}
+  .sub-ch-num{font-family:'Playfair Display',serif;font-size:1.8rem;color:#d4af37;min-width:45px;text-align:center;font-weight:700}
+  .sub-ch-title{font-family:'Playfair Display',serif;font-size:.8rem;color:#888;font-style:italic;margin-top:.3rem}
+  .sub-pips{display:flex;gap:2px;margin-top:.6rem;justify-content:center;flex-wrap:wrap}
+  .sub-pip{width:12px;height:12px;border-radius:2px;cursor:pointer;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);transition:all .15s}
+  .sub-pip:hover:not(.locked){background:rgba(212,175,55,.2);border-color:rgba(212,175,55,.4)}
+  .sub-pip.active{background:rgba(212,175,55,.35);border-color:#d4af37}
+  .sub-pip.major{background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.15)}
+  .sub-pip.locked{opacity:.15;cursor:default}
+
+  .ch-sofar{background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.12);border-radius:10px;padding:.8rem 1rem;margin-bottom:1.2rem;font-size:.8rem;color:#999;line-height:1.6}
+  .ch-sofar-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#d4af37;margin-bottom:.3rem;font-weight:600}
+  .ch-sofar-identities{margin-top:.4rem;display:flex;flex-wrap:wrap;gap:.3rem}
+  .ch-sofar-id{font-size:.7rem;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);color:#d4af37;padding:.15rem .45rem;border-radius:4px;font-family:'Playfair Display',serif;font-style:italic}
+  .ch-scene-header{font-family:'Playfair Display',serif;font-size:1rem;color:#d4af37;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(212,175,55,.15)}
+  .ch-person{background:linear-gradient(145deg,#1a1a22,#16161e);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.6rem;display:flex;gap:.8rem;align-items:flex-start;transition:all .2s}
+  .ch-person:hover{border-color:rgba(212,175,55,.25)}
+  .ch-person-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0}
+  .ch-person-info{flex:1}
+  .ch-person-name{font-family:'Playfair Display',serif;font-size:1rem;color:#f0ece2}
+  .ch-person-aka{font-size:.78rem;color:#d4af37;font-style:italic;margin-top:.1rem}
+  .ch-person-role{font-size:.78rem;color:#888;margin-top:.25rem;line-height:1.5}
+  .ch-person-status{font-size:.6rem;text-transform:uppercase;letter-spacing:1.2px;font-weight:600;padding:.2rem .5rem;border-radius:6px;white-space:nowrap;margin-top:3px;flex-shrink:0}
+  .ch-person-status.new{background:rgba(88,214,141,.15);color:#58d68d}
+  .ch-person-status.present{background:rgba(255,255,255,.05);color:#888}
+  .ch-person-status.alias-change{background:rgba(212,175,55,.15);color:#d4af37}
+  .ch-person-status.referenced{background:rgba(187,143,206,.15);color:#bb8fce}
+  .ch-person-status.death{background:rgba(231,76,60,.15);color:#e74c3c}
+  .ch-person-status.reveal{background:rgba(230,126,34,.15);color:#e67e22}
+  .ch-empty{text-align:center;color:#555;font-style:italic;padding:1.5rem;font-size:.85rem}
+
+  /* CARDS */
+  .filter-bar{display:flex;justify-content:center;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
+  .filter-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);color:#aaa;padding:.35rem .8rem;border-radius:20px;cursor:pointer;font-size:.75rem;font-family:'Inter',sans-serif;transition:all .2s}
+  .filter-btn:hover{border-color:rgba(212,175,55,.5);color:#d4af37}
+  .filter-btn.active{background:rgba(212,175,55,.2);border-color:#d4af37;color:#d4af37}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.2rem;max-width:1200px;margin:0 auto}
+  .card{background:linear-gradient(145deg,#1a1a22,#16161e);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1.3rem;transition:all .3s ease;position:relative;overflow:hidden}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+  .card.protagonist::before{background:linear-gradient(90deg,#d4af37,#f5e6a3)}
+  .card.villain::before{background:linear-gradient(90deg,#c0392b,#e74c3c)}
+  .card.ally::before{background:linear-gradient(90deg,#2980b9,#5dade2)}
+  .card.morrel-family::before{background:linear-gradient(90deg,#27ae60,#58d68d)}
+  .card.parisian::before{background:linear-gradient(90deg,#8e44ad,#bb8fce)}
+  .card.other::before{background:linear-gradient(90deg,#7f8c8d,#bdc3c7)}
+  .card:hover{border-color:rgba(212,175,55,.3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+  .card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.6rem}
+  .original-name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#f0ece2}
+  .role-badge{font-size:.6rem;text-transform:uppercase;letter-spacing:1.5px;padding:.2rem .5rem;border-radius:10px;font-weight:600;white-space:nowrap}
+  .protagonist .role-badge{background:rgba(212,175,55,.2);color:#d4af37}
+  .villain .role-badge{background:rgba(192,57,43,.2);color:#e74c3c}
+  .ally .role-badge{background:rgba(41,128,185,.2);color:#5dade2}
+  .morrel-family .role-badge{background:rgba(39,174,96,.2);color:#58d68d}
+  .parisian .role-badge{background:rgba(142,68,173,.2);color:#bb8fce}
+  .other .role-badge{background:rgba(127,140,141,.2);color:#bdc3c7}
+  .aliases{margin:.6rem 0}.aliases-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#666;margin-bottom:.3rem}
+  .alias-tag{display:inline-flex;align-items:center;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);color:#d4af37;padding:.2rem .55rem;border-radius:6px;font-size:.78rem;margin:.15rem .2rem .15rem 0;font-family:'Playfair Display',serif;font-style:italic;gap:.3rem}
+  .alias-tag .ch{font-family:'Inter',sans-serif;font-style:normal;font-size:.6rem;background:rgba(212,175,55,.25);color:#f5e6a3;padding:.1rem .3rem;border-radius:4px;font-weight:600}
+  .description{font-size:.8rem;line-height:1.6;color:#999;margin-top:.6rem}
+  .connections{margin-top:.6rem;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.06)}
+  .conn-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#555;margin-bottom:.25rem}
+  .conn-item{font-size:.78rem;color:#888;line-height:1.7}
+  .conn-item em{color:#bbb;font-style:normal}
+
+  /* RELATIONSHIP VIEW */
+  .rel-container{max-width:1100px;margin:0 auto;position:relative}
+  .rel-legend{display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.72rem;color:#888}
+  .rel-legend-item{display:flex;align-items:center;gap:.35rem}
+  .rel-legend-line{width:22px;height:3px;border-radius:2px;transition:box-shadow .3s}
+  .rel-legend-item:hover .rel-legend-line{box-shadow:0 0 8px currentColor}
+  .rel-click-hint{text-align:center;font-size:.78rem;color:#666;margin-bottom:.8rem;font-style:italic}
+  .rel-svg-wrap{overflow-x:auto}
+  .rel-canvas{width:100%;height:auto}
+
+  /* Node animations */
+  .rel-node{cursor:pointer;transition:opacity .5s ease, filter .5s ease}
+  .rel-node circle{transition:stroke-width .3s ease, filter .3s ease, r .3s ease}
+  .rel-node:hover circle{stroke-width:3;filter:url(#nodeGlow)}
+  .rel-node text{transition:fill .3s ease, font-size .3s ease}
+
+  /* Connection animations */
+  .rel-conn{transition:opacity .5s ease, stroke-width .4s ease}
+  .rel-node{transition:opacity .5s ease}
+
+  /* Line draw-in animation */
+  @keyframes drawLine{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+  .rel-conn.animate-in{animation:drawLine .8s ease-out forwards}
+
+  /* Flowing dashes for betrayal lines */
+  @keyframes flowDash{to{stroke-dashoffset:-20}}
+  .rel-conn.betrayal-flow{animation:flowDash 1.2s linear infinite}
+
+  /* Protagonist pulse */
+  @keyframes nodePulse{0%,100%{opacity:.2;r:attr(r)}50%{opacity:.5}}
+  @keyframes ringPulse{0%{r:0;opacity:.6;stroke-width:2}100%{r:55;opacity:0;stroke-width:.5}}
+
+  /* Selected node radiate */
+  @keyframes radiate{0%{r:0;opacity:.5;stroke-width:2}100%{r:60;opacity:0;stroke-width:.5}}
+
+  /* Node fade-in on load */
+  @keyframes nodeAppear{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+  .rel-node.appear{animation:nodeAppear .5s ease-out forwards;opacity:0}
+
+  /* Detail panel slide-in */
+  .rel-detail{position:fixed;top:50%;right:1.5rem;transform:translateY(-50%) translateX(20px);background:linear-gradient(145deg,#1e1e28,#1a1a22);border:1px solid rgba(212,175,55,.3);border-radius:14px;padding:1.3rem;width:310px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 40px rgba(212,175,55,.08);z-index:100;opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1)}
+  .rel-detail.visible{opacity:1;pointer-events:auto;transform:translateY(-50%) translateX(0)}
+  .rel-detail-close{position:absolute;top:.6rem;right:.6rem;background:0;border:0;color:#666;cursor:pointer;font-size:1.1rem;padding:.2rem;transition:color .2s, transform .2s}
+  .rel-detail-close:hover{color:#d4af37;transform:rotate(90deg)}
+  .rel-detail-name{font-family:'Playfair Display',serif;font-size:1.2rem;color:#f0ece2;margin-bottom:.2rem}
+  .rel-detail-aka{font-size:.8rem;color:#d4af37;font-style:italic;margin-bottom:.6rem}
+  .rel-detail-desc{font-size:.8rem;color:#999;line-height:1.6;margin-bottom:.8rem}
+  .rel-detail-label{font-size:.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#555;margin-bottom:.25rem}
+  .rel-detail-conn{font-size:.78rem;color:#888;line-height:1.7;margin-bottom:.15rem}
+  .rel-detail-conn em{color:#bbb;font-style:normal}
+  .rel-conn-type{font-size:.6rem;padding:.1rem .35rem;border-radius:4px;margin-left:.2rem}
+  .t-betrayal{background:rgba(231,76,60,.15);color:#e74c3c}
+  .t-family{background:rgba(93,173,226,.15);color:#5dade2}
+  .t-love{background:rgba(88,214,141,.15);color:#58d68d}
+  .t-ally{background:rgba(212,175,55,.15);color:#d4af37}
+
+  .footer{text-align:center;margin-top:2rem;font-size:.72rem;color:#444;font-style:italic;font-family:'Playfair Display',serif}
+  @media(max-width:800px){
+    .grid{grid-template-columns:1fr}body{padding:1rem}h1{font-size:1.7rem}
+    .rel-detail{right:.5rem;left:.5rem;width:auto;top:auto;bottom:1rem;transform:none;max-height:50vh}
+  }
+</style>
+</head>
+<body>
+
+<h1>The Count of Monte Cristo</h1>
+<p class="subtitle">Spoiler-Safe Companion Reader</p>
+
+<!-- GLOBAL CHAPTER SELECTOR -->
+<div class="global-ch">
+  <div class="global-ch-label">I've read through chapter</div>
+  <div class="global-ch-row">
+    <button onclick="setReaderChapter(readerCh-1)">&#8592;</button>
+    <div class="global-ch-num" id="globalNum">41</div>
+    <button onclick="setReaderChapter(readerCh+1)">&#8594;</button>
+  </div>
+  <div class="global-ch-title" id="globalTitle"></div>
+  <div class="global-pips" id="globalPips"></div>
+</div>
+
+<div class="view-toggle">
+  <button class="view-btn active" onclick="switchView('chapters',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    Chapter Guide
+  </button>
+  <button class="view-btn" onclick="switchView('cards',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Characters
+  </button>
+  <button class="view-btn" onclick="switchView('relationships',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><line x1="8.5" y1="7.5" x2="10" y2="16"/><line x1="15.5" y1="7.5" x2="14" y2="16"/><line x1="9" y1="6" x2="15" y2="6"/></svg>
+    Relationships
+  </button>
+</div>
+
+<!-- CHAPTER GUIDE -->
+<div class="view-section active" id="view-chapters">
+<div class="ch-explorer">
+  <div class="ch-slider-wrap">
+    <div class="ch-slider-label">Browse Chapter</div>
+    <div class="ch-slider-row">
+      <button onclick="changeSubCh(-1)">&#8592;</button>
+      <div class="sub-ch-num" id="subChNum">1</div>
+      <button onclick="changeSubCh(1)">&#8594;</button>
+    </div>
+    <div class="sub-ch-title" id="subChTitle"></div>
+    <div class="sub-pips" id="subPips"></div>
+  </div>
+  <div id="chSoFar"></div>
+  <div id="chContent"></div>
+</div>
+</div>
+
+<!-- CHARACTER CARDS -->
+<div class="view-section" id="view-cards">
+<div class="filter-bar" id="filterBar"></div>
+<div class="grid" id="cardGrid"></div>
+</div>
+
+<!-- RELATIONSHIPS -->
+<div class="view-section" id="view-relationships">
+<div class="rel-legend">
+  <div class="rel-legend-item"><div class="rel-legend-line" style="background:#e74c3c"></div> Betrayal</div>
+  <div class="rel-legend-item"><div class="rel-legend-line" style="background:#5dade2"></div> Family</div>
+  <div class="rel-legend-item"><div class="rel-legend-line" style="background:#58d68d"></div> Love</div>
+  <div class="rel-legend-item"><div class="rel-legend-line" style="background:#d4af37"></div> Alliance</div>
+</div>
+<div class="rel-click-hint">Click any character to highlight their connections</div>
+<div class="rel-container">
+  <div class="rel-svg-wrap"><svg class="rel-canvas" id="relSvg" viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg"></svg></div>
+</div>
+<div class="rel-detail" id="relDetail">
+  <button class="rel-detail-close" onclick="deselectNode()">&#10005;</button>
+  <div class="rel-detail-name" id="rdName"></div>
+  <div class="rel-detail-aka" id="rdAka"></div>
+  <div class="rel-detail-desc" id="rdDesc"></div>
+  <div><div class="rel-detail-label">Connections</div><div id="rdConns"></div></div>
+</div>
+</div>
+
+<div class="footer">"All human wisdom is contained in these two words: Wait and Hope."<br><a href="https://x.com/kbadinger" target="_blank" style="color:#555;text-decoration:none;font-style:normal;font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:.5px">Built by @kbadinger</a></div>
+
+<script>
+// ===== STATE =====
+let readerCh = 41;
+let subCh = 1;
+let currentView = 'chapters';
+let currentFilter = 'all';
+let selectedNode = null;
+
+// ===== COLORS =====
+const C={protagonist:'#d4af37',suspicious:'#e67e22',villain:'#e74c3c',ally:'#5dade2',love:'#e8a0bf',morrel:'#58d68d',parisian:'#bb8fce',neutral:'#95a5a6',minor:'#bdc3c7'};
+const majorCh=[1,3,4,6,7,8,12,15,17,19,20,21,26,27,29,31,33,34,36,37,39,43,44,47,48,52,55,56,58,59,60,63,64,72,75,77,78,82,83,86,89,90,92,95,96,100,102,109,111,113,116,117];
+
+// ===== GROUP TO FILTER CATEGORY =====
+const g2cat={protagonist:'protagonist',villain:'villain',suspicious:'villain',ally:'ally',love:'ally',morrel:'morrel-family',parisian:'parisian',neutral:'other',minor:'other'};
+
+// ===== KNOWLEDGE UNLOCKS =====
+const KU=[
+{ch:1,t:"A young sailor named Edmond Dantès returns to Marseilles. You're meeting a bunch of characters — hard to tell who matters yet."},
+{ch:3,t:"Mercédès is Dantès' fiancée. Fernand is a jealous rival. Caderousse is a neighbor."},
+{ch:4,t:"Danglars wrote a denunciation letter — maybe drunken spite, maybe deliberate. Fernand took it and mailed it. Fernand is clearly the one who acted with intent."},
+{ch:6,t:"Villefort, the prosecutor, has condemned Dantès to protect himself — the letter implicated Villefort's own father."},
+{ch:8,t:"Dantès is imprisoned in the Château d'If as 'Number 34.' His life as a free man is over."},
+{ch:15,t:"Abbé Faria tunnels into Dantès' cell. A brilliant scholar begins educating him."},
+{ch:17,t:"Faria deduces the betrayers: Fernand (mailed the letter), Danglars (wrote it — how deliberate is debatable), Villefort (self-preservation). Faria reveals the treasure of Monte Cristo."},
+{ch:20,t:"Dantès escapes the Château d'If by taking Faria's place in the burial sack."},
+{ch:21,t:"Dantès is rescued by smugglers as 'Sinbad the Sailor.' He finds the treasure on Monte Cristo island."},
+{ch:26,t:"Disguised as 'Abbé Busoni,' Dantès extracts a full confession from Caderousse confirming the conspiracy."},
+{ch:27,t:"As 'Lord Wilmore,' Dantès anonymously rescues Morrel from bankruptcy."},
+{ch:31,t:"Dantès' primary identity — the Count of Monte Cristo — debuts in Rome."},
+{ch:34,t:"Paris reveals the time skip: Fernand is now Count de Morcerf. Danglars is Baron Danglars. Villefort is Royal Prosecutor. Mercédès is Countess de Morcerf."},
+{ch:36,t:"Haydée is introduced — daughter of Ali Pasha, whose fate connects to Fernand's military career."},
+{ch:37,t:"Maximilian Morrel and Valentine de Villefort are secretly in love. Noirtier appears — paralyzed but sharp."},
+{ch:39,t:"Monte Cristo buys Villefort's former Auteuil house — where dark secrets are buried."},
+{ch:44,t:"Bertuccio's backstory: he stabbed Villefort at Auteuil and found a buried baby — Benedetto."},
+{ch:48,t:"Monte Cristo saves Mme Danglars from runaway horses — building social debts."},
+{ch:52,t:"Monte Cristo discusses poisons with Mme de Villefort. She's very interested."},
+{ch:55,t:"'Andrea Cavalcanti' arrives in Paris — actually Benedetto, planted by Monte Cristo."},
+{ch:60,t:"Monte Cristo manipulates the telegraph to cause Danglars financial losses."},
+{ch:64,t:"Caderousse tries to rob Monte Cristo and is killed by Benedetto."},
+{ch:72,t:"People in the Villefort household are dying. Poison is suspected."},
+{ch:78,t:"The Janina affair surfaces — Fernand's betrayal of Ali Pasha is about to become public."},
+{ch:86,t:"Morcerf faces a senate inquiry. Haydée testifies against him."},
+{ch:89,t:"Albert challenges Monte Cristo to a duel. Mercédès begs him to spare her son."},
+{ch:90,t:"Albert apologizes instead of fighting. He's learned the truth about his father."},
+{ch:92,t:"Fernand is exposed and ruined. Mercédès and Albert leave him. Fernand kills himself."},
+{ch:96,t:"Andrea/Benedetto's engagement to Eugénie. His past catches up."},
+{ch:103,t:"Valentine appears to die — but Monte Cristo has been protecting her."},
+{ch:109,t:"Benedetto's trial: he reveals he is Villefort's illegitimate son."},
+{ch:111,t:"Villefort's wife is the poisoner. She kills herself and their son. Villefort goes mad. Monte Cristo reveals his identity."},
+{ch:113,t:"Monte Cristo visits Marseilles. Final farewell with Mercédès."},
+{ch:115,t:"Danglars captured by Vampa's bandits — starved and forced to spend his fortune."},
+{ch:117,t:"Monte Cristo reveals himself to Danglars. Departs with Haydée. Maximilian and Valentine reunited."}
+];
+
+function getStoryState(ch){
+  let txt='';
+  for(const u of KU) if(u.ch<=ch) txt=u.t;
+  let ids=["Edmond Dantès"];
+  if(ch>=8) ids.push("Number 34");
+  if(ch>=21) ids.push("Sinbad the Sailor");
+  if(ch>=26) ids.push("Abbé Busoni");
+  if(ch>=27) ids.push("Lord Wilmore");
+  if(ch>=31) ids.push("Count of Monte Cristo");
+  if(ch>=34){ids.push("Morcerf = Fernand");ids.push("Baron Danglars");ids.push("Countess = Mercédès");}
+  if(ch>=55) ids.push("Andrea = Benedetto");
+  if(ch>=109) ids.push("Benedetto = Villefort's son");
+  return {summary:txt,ids};
+}
+
+// ===== CHARACTER DATA (for cards + relationships) =====
+// tiers: [[maxCh, group, badge, description], ...]
+// aliases: [[ch, name], ...]
+// conns: [[targetId, type, revealCh, label], ...]
+const chars={
+dantes:{n:"Edmond Dantès",first:1,tiers:[
+  [1,"neutral","Sailor","A young first mate returning to Marseilles. Capable, well-liked, about to be promoted."],
+  [5,"protagonist","Protagonist","Arrested at his own engagement party. Innocent, bewildered — condemned by forces he can't see."],
+  [8,"protagonist","Prisoner","Imprisoned as Number 34 in the Château d'If. No trial, no appeal. Forgotten."],
+  [21,"protagonist","Escaped","Escaped after 14 years. Educated by Faria, armed with a treasure map. A very different man."],
+  [31,"protagonist","Protagonist","Now the Count of Monte Cristo — impossibly wealthy, multiple identities, infiltrating Paris to destroy his enemies."],
+  [117,"protagonist","Protagonist","Sailor → prisoner → avenger. Five identities, each serving a tactical purpose in his revenge."]
+],aliases:[[8,"Number 34"],[21,"Sinbad the Sailor"],[26,"Abbé Busoni"],[27,"Lord Wilmore"],[31,"Count of Monte Cristo"]],
+conns:[["mercedes","love",3,"Fiancée"],["morrel_sr","ally",1,"Employer"],["fernand","betrayal",4,"Betrayed by him"],["danglars","betrayal",4,"Betrayed by him"],["villefort","betrayal",7,"Condemned by him"],["faria","ally",15,"Prison mentor"],["caderousse","ally",26,"Extracted confession"],["bertuccio","ally",29,"Steward"],["vampa","ally",33,"Bandit ally"],["albert","ally",33,"Entry to Paris"],["haydee","ally",36,"Companion"],["maximilian","ally",37,"True friend"],["benedetto","ally",55,"Weapon against Villefort"]]},
+fernand:{n:"Fernand Mondego",first:3,tiers:[
+  [3,"neutral","Fisherman","A Catalan fisherman, Mercédès' cousin. Jealous, brooding — you get a bad feeling."],
+  [4,"villain","Villain","Mailed the denunciation letter deliberately. Destroyed Dantès to take Mercédès."],
+  [34,"villain","Villain","Now Count de Morcerf — peer of France, military hero. Albert's father, Mercédès' husband."],
+  [92,"villain","Dead","Exposed, ruined, abandoned. Killed himself."]
+],aliases:[[34,"Count de Morcerf"]],
+conns:[["dantes","betrayal",4,"Mailed the letter"],["danglars","betrayal",4,"Co-conspirator"],["mercedes","family",13,"Married her"],["albert","family",34,"Father"],["haydee","betrayal",49,"Betrayed her father"]]},
+danglars:{n:"Danglars",first:1,tiers:[
+  [1,"neutral","Supercargo","The ship's bookkeeper. Has an attitude problem."],
+  [4,"suspicious","Suspicious","Wrote the denunciation letter — drunken spite or calculated? His intentions are murky."],
+  [34,"suspicious","Suspicious","Now Baron Danglars, wealthy banker. Profited while Dantès rotted. But how deliberate was his crime?"],
+  [46,"villain","Villain","Greed defines him. It led him to write that letter and profit from Dantès' destruction."],
+  [117,"villain","Ruined","Ruined by financial warfare. Shown mercy — his sin was greed, not malice."]
+],aliases:[[34,"Baron Danglars"]],
+conns:[["dantes","betrayal",4,"Wrote the letter"],["fernand","betrayal",4,"Co-conspirator"],["eugenie","family",34,"Father"],["mme_danglars","family",47,"Husband"]]},
+villefort:{n:"Gérard de Villefort",first:6,tiers:[
+  [6,"neutral","Prosecutor","Deputy Prosecutor. Seems fair at first — almost lets Dantès go. Then something changes."],
+  [7,"villain","Villain","Burned evidence, condemned Dantès to protect himself. His father is Noirtier, a Bonapartist."],
+  [34,"villain","Villain","Now Royal Prosecutor of Paris. Most powerful legal figure in France."],
+  [43,"villain","Villain","Dark secret: buried his illegitimate baby alive in the Auteuil garden."],
+  [111,"villain","Mad","Wife exposed as poisoner. Family destroyed. Goes completely insane."]
+],aliases:[[6,"Deputy Prosecutor"],[34,"Royal Prosecutor"]],
+conns:[["dantes","betrayal",7,"Condemned him"],["noirtier","family",12,"Father"],["valentine","family",36,"Daughter"],["benedetto","family",44,"Illegitimate son (buried alive)"],["bertuccio","betrayal",43,"Bertuccio stabbed him"],["mme_danglars","betrayal",63,"Former lovers"],["mme_villefort","family",48,"Second wife"]]},
+mercedes:{n:"Mercédès",first:3,tiers:[
+  [3,"neutral","Catalan Woman","Dantès' fiancée. Beautiful, loyal — you like her immediately."],
+  [5,"love","Tragic","Watched Dantès arrested at their engagement. Devastated."],
+  [34,"love","Tragic","Now Countess de Morcerf. Married Fernand. Carries deep sadness. May recognize the Count."],
+  [89,"love","Tragic","She KNOWS the Count is Edmond. Begs him to spare Albert."],
+  [92,"love","Tragic","Left Fernand. Chose poverty. Returned to Marseilles with nothing."]
+],aliases:[[34,"Countess de Morcerf"]],
+conns:[["dantes","love",3,"Fiancée"],["fernand","family",13,"Married him"],["albert","family",34,"Mother"]]},
+faria:{n:"Abbé Faria",first:15,tiers:[
+  [15,"ally","Mentor","Italian scholar imprisoned for politics. Tunneling for years. Brilliant — guards think he's crazy."],
+  [19,"ally","Dead","Educated Dantès, revealed the conspiracy and treasure. Died in the Château d'If."]
+],aliases:[[15,"Number 27"],[15,"'The Mad Priest'"]],
+conns:[["dantes","ally",15,"Student, surrogate son"]]},
+morrel_sr:{n:"Pierre Morrel",first:1,tiers:[
+  [1,"neutral","Shipowner","Owner of the Pharaon. Seems decent, trusts Dantès."],
+  [11,"morrel","Good Man","The only person who tried to help Dantès. Petitioned for his release."],
+  [27,"morrel","Saved","Saved from bankruptcy by Dantès (as Lord Wilmore). Never knows who helped him."]
+],aliases:[],
+conns:[["dantes","ally",1,"Employer — tried to save him"],["maximilian","family",37,"Father"],["julie","family",30,"Father"]]},
+caderousse:{n:"Gaspard Caderousse",first:2,tiers:[
+  [2,"neutral","Neighbor","Dantès' neighbor. Knows everyone's business. A bit jealous."],
+  [4,"neutral","Bystander","Watched the conspiracy. Too drunk to stop it. Not a villain, but not innocent."],
+  [26,"neutral","Informant","Struggling innkeeper. Told 'Busoni' the full conspiracy story."],
+  [64,"neutral","Dead","Tried to rob Monte Cristo. Killed by Benedetto. Died as he lived."]
+],aliases:[],
+conns:[["dantes","ally",26,"Confessed the conspiracy"],["benedetto","betrayal",64,"Murdered by him"]]},
+louis_dantes:{n:"Louis Dantès",first:2,tiers:[
+  [2,"neutral","Father","Edmond's elderly father. Frail, declining, struggling alone."],
+  [13,"neutral","Dead","Died while Dantès was imprisoned. Starved. Nobody helped him."]
+],aliases:[],conns:[["dantes","family",2,"Father"]]},
+noirtier:{n:"Noirtier de Villefort",first:12,tiers:[
+  [12,"neutral","Bonapartist","Villefort's father. Active Bonapartist agent. This is why Villefort buried Dantès."],
+  [37,"parisian","Paralyzed Patriarch","Completely paralyzed, communicates through eyes. Mind intact. Fiercely protects Valentine."],
+  [75,"parisian","Protector","Outsmarts everyone to protect Valentine. Revealed he killed Franz's father in a duel."]
+],aliases:[],
+conns:[["villefort","family",12,"Son"],["valentine","family",37,"Granddaughter — protector"]]},
+haydee:{n:"Haydée",first:36,tiers:[
+  [36,"ally","Companion","Young Greek woman with Monte Cristo. Daughter of Ali Pasha of Janina."],
+  [77,"ally","Witness","Father betrayed by Fernand, sold to Turks. She was enslaved. Monte Cristo's weapon against Morcerf."],
+  [117,"ally","Free","Testified against Morcerf. Declared her love for Monte Cristo. They sail away together."]
+],aliases:[[36,"Daughter of Ali Pasha"]],
+conns:[["dantes","ally",36,"Companion"],["fernand","betrayal",49,"He betrayed her father"]]},
+albert:{n:"Albert de Morcerf",first:33,tiers:[
+  [33,"parisian","Viscount","Charming, naive young aristocrat in Rome. Kidnapped by bandits, rescued by Monte Cristo."],
+  [34,"parisian","Viscount","Fernand and Mercédès' son. Introduces Monte Cristo to Paris. Doesn't know the Count's true purpose."],
+  [90,"parisian","Honorable","Learned truth about his father. Apologized to Monte Cristo. Chose his mother."]
+],aliases:[],
+conns:[["fernand","family",34,"Father"],["mercedes","family",34,"Mother"],["franz","ally",33,"Best friend"],["dantes","ally",33,"Rescued by him"]]},
+valentine:{n:"Valentine de Villefort",first:36,tiers:[
+  [36,"parisian","Villefort's Daughter","Sweet, kind, close to grandfather Noirtier."],
+  [37,"parisian","Secret Lover","Secretly in love with Maximilian Morrel. Impossible love across family lines."],
+  [79,"parisian","Target","Being poisoned. The Villefort household poisoner is targeting her."],
+  [102,"parisian","Apparently Dead","Took Monte Cristo's pill. Appears dead. Everyone mourns."],
+  [116,"parisian","Alive","Saved by Monte Cristo. Reunited with Maximilian."]
+],aliases:[],
+conns:[["villefort","family",36,"Father"],["noirtier","family",37,"Grandfather"],["maximilian","love",37,"Secret lovers"]]},
+maximilian:{n:"Maximilian Morrel",first:37,tiers:[
+  [37,"morrel","Captain","The shipowner's honorable son. Monte Cristo's genuine friend. Secretly loves Valentine."],
+  [102,"morrel","Grieving","Believes Valentine is dead. Wants to die. Monte Cristo says: wait three days."],
+  [116,"morrel","Reunited","Valentine is alive. Monte Cristo kept his promise. Inherits the island."]
+],aliases:[],
+conns:[["morrel_sr","family",37,"Father"],["valentine","love",37,"Secret love"],["dantes","ally",37,"True friend"]]},
+bertuccio:{n:"Giovanni Bertuccio",first:29,tiers:[
+  [29,"ally","Steward","Monte Cristo's steward. A Corsican with a dark past involving Auteuil."],
+  [44,"ally","Steward","Stabbed Villefort, found the buried baby (Benedetto). Monte Cristo knows everything."]
+],aliases:[],
+conns:[["dantes","ally",29,"Master"],["villefort","betrayal",43,"Vendetta — stabbed him"],["benedetto","family",44,"Raised him"]]},
+benedetto:{n:"Benedetto",first:44,tiers:[
+  [44,"minor","Referenced","Villefort's illegitimate son. Buried alive as a baby, rescued by Bertuccio, became a criminal."],
+  [56,"suspicious","Fake Prince","Now 'Andrea Cavalcanti' — cleaned up by Monte Cristo and placed in high society."],
+  [82,"villain","Murderer","Killed Caderousse during a robbery. True nature revealed."],
+  [109,"villain","Villefort's Son","In open court, reveals he is Villefort's illegitimate son. Destroys the prosecutor."]
+],aliases:[[56,"Andrea Cavalcanti"],[109,"Villefort's illegitimate son"]],
+conns:[["villefort","family",44,"Father (who buried him)"],["dantes","ally",55,"Puppetmaster"],["caderousse","betrayal",64,"Murdered him"],["bertuccio","family",44,"Raised by him"],["mme_danglars","family",109,"Mother"]]},
+franz:{n:"Franz d'Épinay",first:31,tiers:[
+  [31,"parisian","Baron","Thoughtful young Parisian tourist. Meets 'Sinbad' on Monte Cristo island. Unsettled."],
+  [33,"parisian","Cautious Friend","Albert's friend. Sees through Monte Cristo more than anyone."],
+  [75,"parisian","Departed","Learns Noirtier killed his father. Engagement to Valentine ends."]
+],aliases:[],
+conns:[["albert","ally",33,"Best friend"],["dantes","ally",31,"Met as Sinbad — suspicious"]]},
+vampa:{n:"Luigi Vampa",first:33,tiers:[
+  [33,"minor","Bandit","Roman bandit chief. Answers to Monte Cristo."],
+  [114,"minor","Bandit","Captures Danglars on Monte Cristo's orders."]
+],aliases:[],conns:[["dantes","ally",33,"At his command"]]},
+mme_danglars:{n:"Mme Danglars",first:47,tiers:[
+  [47,"parisian","Baron's Wife","Danglars' wife. Saved by the Count. Has her own secrets."],
+  [63,"suspicious","Connected","Reacted to the Auteuil garden story. Connected to Villefort's secret somehow."],
+  [109,"parisian","Exposed","Revealed as Benedetto's mother. The affair with Villefort made public."]
+],aliases:[],
+conns:[["danglars","family",47,"Husband"],["villefort","betrayal",63,"Former lovers"],["benedetto","family",109,"Mother"]]},
+mme_villefort:{n:"Mme de Villefort",first:48,tiers:[
+  [48,"neutral","Second Wife","Villefort's second wife. Seems quiet, domestic."],
+  [52,"suspicious","Interested in Poisons","Very attentive when Monte Cristo discusses poisons. Innocent curiosity or something darker?"],
+  [72,"suspicious","Suspected","People are dying in the household. She had that conversation about poisons..."],
+  [95,"villain","Poisoner","Confirmed: poisoning household members to secure inheritance for her son."],
+  [111,"villain","Dead","Poisoned herself and her son rather than face justice."]
+],aliases:[],
+conns:[["villefort","family",48,"Wife"],["dantes","betrayal",52,"He taught her about poisons"]]},
+julie:{n:"Julie Morrel",first:30,tiers:[
+  [30,"morrel","Morrel's Daughter","Morrel's daughter. Treasures the silk purse from 'Sinbad the Sailor.'"]
+],aliases:[],conns:[["morrel_sr","family",30,"Father"]]},
+eugenie:{n:"Eugénie Danglars",first:66,tiers:[
+  [66,"parisian","Reluctant Bride","Independent-minded. Not interested in marriage. Being used as a pawn."],
+  [97,"parisian","Free","Fled Paris after Andrea's arrest. Took her fate into her own hands."]
+],aliases:[],conns:[["danglars","family",34,"Father"]]},
+beauchamp:{n:"Beauchamp",first:69,tiers:[
+  [69,"parisian","Journalist","Albert's journalist friend. Picked up a story about Janina."],
+  [84,"parisian","Journalist","Confirmed the Janina story is about Morcerf. Warned Albert."]
+],aliases:[],conns:[["albert","ally",69,"Friend"]]}
+};
+
+// ===== RELATIONSHIP LINES =====
+// [fromId, toId, type, revealCh]
+const rels=[
+["dantes","mercedes","love",3],["dantes","morrel_sr","ally",1],["louis_dantes","dantes","family",2],
+["fernand","dantes","betrayal",4],["danglars","dantes","betrayal",4],["fernand","danglars","betrayal",4],
+["villefort","dantes","betrayal",7],["dantes","faria","ally",15],["dantes","caderousse","ally",26],
+["dantes","bertuccio","ally",29],["dantes","vampa","ally",33],["dantes","albert","ally",33],
+["fernand","mercedes","family",13],["fernand","albert","family",34],["mercedes","albert","family",34],
+["villefort","noirtier","family",12],["dantes","haydee","ally",36],["villefort","valentine","family",36],
+["noirtier","valentine","family",37],["maximilian","valentine","love",37],["maximilian","morrel_sr","family",37],
+["dantes","maximilian","ally",37],["morrel_sr","julie","family",30],["albert","franz","ally",33],
+["bertuccio","villefort","betrayal",43],["villefort","benedetto","family",44],["bertuccio","benedetto","family",44],
+["danglars","mme_danglars","family",47],["villefort","mme_villefort","family",48],["danglars","eugenie","family",34],
+["fernand","haydee","betrayal",49],["dantes","mme_villefort","betrayal",52],["dantes","benedetto","ally",55],
+["mme_danglars","villefort","betrayal",63],["benedetto","caderousse","betrayal",64],
+["albert","beauchamp","ally",69],["mme_danglars","benedetto","family",109]
+];
+
+// ===== SVG POSITIONS [x, y, radius] =====
+const relPos={
+dantes:[500,80,34],faria:[680,80,22],louis_dantes:[350,130,16],
+fernand:[200,260,28],danglars:[500,260,28],villefort:[800,260,28],
+mercedes:[200,400,22],albert:[300,340,20],mme_danglars:[430,400,16],eugenie:[500,400,16],
+valentine:[650,400,20],noirtier:[800,400,20],mme_villefort:[920,330,16],
+bertuccio:[120,480,20],haydee:[350,480,20],vampa:[920,480,18],
+maximilian:[550,530,20],benedetto:[680,530,18],
+franz:[350,580,16],morrel_sr:[550,640,20],julie:[440,640,16],caderousse:[700,640,18],
+beauchamp:[180,340,14]
+};
+
+// ===== CHAPTER DATA (for chapter guide) =====
+const D={
+1:{t:"Marseilles — The Arrival",p:[{n:"Edmond Dantès",a:"Young sailor, first mate of the Pharaon",g:"neutral",s:"new",d:"A young sailor returning to Marseilles. The captain died at sea and Dantès took command. Seems smart, capable, well-liked by the crew."},{n:"Danglars",a:"The ship's supercargo (accountant)",g:"neutral",s:"new",d:"The ship's bookkeeper. There's an edge to him — he seems annoyed about something. Maybe he doesn't like Dantès getting so much praise."},{n:"Pierre Morrel",a:"Owner of the Pharaon",g:"neutral",s:"new",d:"The shipowner. Seems like a decent man. Trusts Dantès and plans to promote him to captain."}]},
+2:{t:"Father and Son",p:[{n:"Edmond Dantès",a:"Home at last",g:"neutral",s:"present",d:"Reunites with his elderly father, who has nearly starved while Dantès was away."},{n:"Louis Dantès",a:"Edmond's father",g:"neutral",s:"new",d:"Old, frail, clearly declining. Has been struggling alone while his son was at sea."},{n:"Caderousse",a:"Dantès' neighbor, a tailor",g:"neutral",s:"new",d:"Lives next door. Seems to know everyone's business. A jealous edge when he hears about the promotion."}]},
+3:{t:"The Catalans",p:[{n:"Mercédès",a:"A beautiful Catalan woman",g:"neutral",s:"new",d:"Dantès' fiancée. Lives in the Catalan fishing village. Loyal, loving — you like her immediately."},{n:"Fernand Mondego",a:"A Catalan fisherman, Mercédès' cousin",g:"neutral",s:"new",d:"Desperately in love with Mercédès, who only has eyes for Dantès. Brooding, jealous — you get a bad feeling."},{n:"Edmond Dantès",a:"The happiest man in Marseilles",g:"neutral",s:"present",d:"Arrives to see Mercédès. They're planning their wedding. Everything is looking up."}]},
+4:{t:"The Conspiracy",p:[{n:"Danglars",a:"The letter-writer",g:"suspicious",s:"reveal",d:"Writes an anonymous letter denouncing Dantès as a Bonapartist traitor. Drunken venting or calculated? He writes it but doesn't send it. His intentions are murky."},{n:"Fernand Mondego",a:"The one who mails it",g:"villain",s:"reveal",d:"Takes the letter and MAILS it. Deliberate — removing Dantès to take Mercédès. He pulled the trigger."},{n:"Caderousse",a:"The bystander",g:"neutral",s:"present",d:"Drunk, present, watching it happen. Too cowardly to stop it."}]},
+5:{t:"The Betrothal Feast",p:[{n:"Edmond Dantès",a:"The groom-to-be — arrested",g:"protagonist",s:"present",d:"Arrested at his own engagement party. Has no idea what's happening or why."},{n:"Mercédès",a:"The bride-to-be",g:"love",s:"present",d:"Watches helplessly as Dantès is taken. Her world collapses."},{n:"Pierre Morrel",a:"The shipowner — on Dantès' side",g:"morrel",s:"present",d:"Shocked. Immediately tries to help."},{n:"Fernand Mondego",a:"Watching from the shadows",g:"villain",s:"present",d:"His plan is working."}]},
+6:{t:"The Deputy Crown Prosecutor",p:[{n:"Gérard de Villefort",a:"Deputy Prosecutor of Marseilles",g:"neutral",s:"new",d:"Interrogates Dantès. Seems fair at first. Then reads a letter addressed to 'Noirtier' and everything changes."},{n:"Edmond Dantès",a:"The accused",g:"protagonist",s:"present",d:"Naive, honest. Villefort almost frees him — then suddenly doesn't."},{n:"Noirtier",a:"A name on a letter",g:"neutral",s:"referenced",d:"Just a name. But Villefort reacted very strongly. Who is Noirtier to Villefort?"}]},
+7:{t:"The Examination",p:[{n:"Villefort",a:"Self-serving prosecutor",g:"villain",s:"reveal",d:"Burns the letter. Sends Dantès to the Château d'If without trial. Why? Noirtier is his own father. He's protecting himself."},{n:"Edmond Dantès",a:"Condemned",g:"protagonist",s:"present",d:"Told he'll be freed, then secretly transferred. He's vanishing from the world."}]},
+8:{t:"The Château d'If",p:[{n:"Edmond Dantès",a:"NOW: Prisoner Number 34",g:"protagonist",s:"alias-change",d:"Arrives at the island fortress. No longer a person — just a number."}]},
+9:{t:"The Evening of the Betrothal",p:[{n:"Villefort",a:"At his own engagement party",g:"villain",s:"present",d:"Returns to his celebration after condemning Dantès. Life goes on for the powerful."}]},
+10:{t:"The King's Cabinet",p:[{n:"Villefort",a:"Climbing the ladder",g:"villain",s:"present",d:"Uses Dantès' imprisonment as career fuel."}]},
+11:{t:"The Corsican Ogre",p:[{n:"Pierre Morrel",a:"Still fighting for Dantès",g:"morrel",s:"present",d:"Petitions for Dantès' release. Gets nowhere."},{n:"Louis Dantès",a:"Edmond's father",g:"neutral",s:"present",d:"Declining. His son is gone."}]},
+12:{t:"Father and Son",p:[{n:"Villefort",a:"Prosecutor — family revealed",g:"villain",s:"present",d:"His father is Noirtier — a Bonapartist. This is why Villefort buried Dantès."},{n:"Noirtier de Villefort",a:"Villefort's father — a Bonapartist",g:"neutral",s:"new",d:"Finally appears. Active Bonapartist agent. Now you understand the cover-up."}]},
+13:{t:"The Hundred Days",p:[{n:"Edmond Dantès",a:"Number 34 — forgotten",g:"protagonist",s:"present",d:"Napoleon rises and falls. None of it reaches Dantès in his cell."},{n:"Danglars",a:"Leaving Marseilles",g:"suspicious",s:"present",d:"Building wealth as a banker. Moving on while Dantès rots."},{n:"Fernand Mondego",a:"Joining the army",g:"villain",s:"present",d:"Enlists. Transforming from fisherman to soldier."},{n:"Mercédès",a:"Alone",g:"love",s:"present",d:"Waiting, grieving. The villains are moving on with their lives."}]},
+14:{t:"The Two Prisoners",p:[{n:"Edmond Dantès",a:"Number 34 — years pass",g:"protagonist",s:"present",d:"Hope to despair to near-suicide. Then — scratching in the wall."}]},
+15:{t:"Number 34 and Number 27",p:[{n:"Edmond Dantès",a:"Number 34",g:"protagonist",s:"present",d:"Meets his fellow prisoner through a tunnel. Another human voice after years."},{n:"Abbé Faria",a:"Number 27 / 'The Mad Priest'",g:"ally",s:"new",d:"Italian scholar, tunneling for years. Accidentally dug toward Dantès. Brilliant."}]},
+16:{t:"A Learned Italian",p:[{n:"Abbé Faria",a:"Dantès' teacher",g:"ally",s:"present",d:"Educates Dantès: languages, sciences, history. Years of study."},{n:"Edmond Dantès",a:"The student",g:"protagonist",s:"present",d:"Being remade from the inside."}]},
+17:{t:"The Abbé's Chamber",p:[{n:"Abbé Faria",a:"Detective and treasure-keeper",g:"ally",s:"present",d:"Deduces the conspiracy. Identifies Fernand, Danglars, Villefort. Reveals the treasure of Monte Cristo."},{n:"Edmond Dantès",a:"Now he knows everything",g:"protagonist",s:"present",d:"Understands who betrayed him and why. Has a treasure map. Needs to escape."}]},
+18:{t:"The Treasure",p:[{n:"Abbé Faria",a:"Dying",g:"ally",s:"present",d:"His last gift: the treasure knowledge."},{n:"Edmond Dantès",a:"Planning escape",g:"protagonist",s:"present",d:"Faria's death gives him an idea."}]},
+19:{t:"The Third Attack",p:[{n:"Abbé Faria",a:"Number 27",g:"ally",s:"death",d:"Dies. The most important relationship in Dantès' life ends."}]},
+20:{t:"The Cemetery of the Château d'If",p:[{n:"Edmond Dantès",a:"Between identities",g:"protagonist",s:"present",d:"Sews himself into Faria's burial sack. Thrown into the sea. Cuts free. After 14 years, he's out."}]},
+21:{t:"The Isle of Tiboulen",p:[{n:"Edmond Dantès",a:"NOW: Sinbad the Sailor",g:"protagonist",s:"alias-change",d:"Rescued by smugglers. Joins as 'Sinbad the Sailor.' First alias."}]},
+22:{t:"The Smugglers",p:[{n:"Edmond Dantès",a:"Sinbad — among smugglers",g:"protagonist",s:"present",d:"Biding time until he can reach Monte Cristo island."}]},
+23:{t:"The Isle of Monte Cristo",p:[{n:"Edmond Dantès",a:"Treasure hunter",g:"protagonist",s:"present",d:"Reaches the island. Faria's directions were real."}]},
+24:{t:"The Secret Cave",p:[{n:"Edmond Dantès",a:"Now the richest man alive",g:"protagonist",s:"present",d:"Opens the vault. Gold, jewels — an incalculable fortune."}]},
+25:{t:"The Stranger",p:[{n:"Edmond Dantès",a:"Building his network",g:"protagonist",s:"present",d:"Returns to Marseilles in disguise. Father died. Mercédès moved on."},{n:"Pierre Morrel",a:"Struggling",g:"morrel",s:"present",d:"Business failing. The one good man punished while villains prospered."}]},
+26:{t:"The Pont du Gard Inn",p:[{n:"Edmond Dantès",a:"NOW: Abbé Busoni",g:"protagonist",s:"alias-change",d:"Disguised as an Italian priest. Draws out Caderousse's full confession."},{n:"Caderousse",a:"Innkeeper — willing to talk",g:"neutral",s:"present",d:"Tells 'Busoni' everything. Gets a diamond — a test of character."}]},
+27:{t:"The Story (continued)",p:[{n:"Edmond Dantès",a:"NOW: Lord Wilmore",g:"protagonist",s:"alias-change",d:"Third alias — an English lord. Anonymously rescues Morrel."},{n:"Pierre Morrel",a:"On the brink",g:"morrel",s:"present",d:"Nearly kills himself. Saved by a mysterious benefactor."}]},
+28:{t:"The Prison Registers",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo (forming)",g:"protagonist",s:"present",d:"Confirms his imprisonment details. Gathering evidence."}]},
+29:{t:"The House at Auteuil",p:[{n:"Giovanni Bertuccio",a:"A Corsican with a story",g:"ally",s:"new",d:"Monte Cristo's steward. Nearly faints when the Count buys a house in Auteuil."}]},
+30:{t:"The Fifth of September",p:[{n:"Julie Morrel",a:"Morrel's daughter",g:"morrel",s:"new",d:"Received the mysterious rescue. Treasures the silk purse from 'Sinbad.'"},{n:"Maximilian Morrel",a:"Morrel's son (briefly)",g:"morrel",s:"referenced",d:"Referenced as a military officer."}]},
+31:{t:"Italy — Sinbad the Sailor",p:[{n:"Edmond Dantès",a:"NOW: The Count of Monte Cristo",g:"protagonist",s:"alias-change",d:"The grand identity debuts in Rome. Fourth and primary alias."},{n:"Franz d'Épinay",a:"Baron, young Parisian tourist",g:"parisian",s:"new",d:"Encounters 'Sinbad' on Monte Cristo island. Something unsettles him."}]},
+32:{t:"The Waking",p:[{n:"Franz d'Épinay",a:"Processing what he saw",g:"parisian",s:"present",d:"Was the underground palace real? It was."}]},
+33:{t:"Roman Bandits",p:[{n:"Albert de Morcerf",a:"Viscount in Rome",g:"parisian",s:"new",d:"Franz's friend. Naive, charming. Kidnapped by bandits."},{n:"Luigi Vampa",a:"Roman bandit chief",g:"minor",s:"new",d:"Kidnaps Albert. Releases him at Monte Cristo's word."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Rescues Albert with a word. Now has a connection to Parisian society."},{n:"Franz d'Épinay",a:"Watching and worrying",g:"parisian",s:"present",d:"This man is not what he appears."}]},
+34:{t:"The Apparition / Paris",p:[{n:"Fernand Mondego",a:"NOW: Count de Morcerf",g:"villain",s:"alias-change",d:"The fisherman is now a count. He's Albert's FATHER. Married Mercédès. Same man, new name."},{n:"Danglars",a:"NOW: Baron Danglars",g:"suspicious",s:"alias-change",d:"The supercargo became a banker baron. Profited while Dantès rotted."},{n:"Mercédès",a:"NOW: Countess de Morcerf",g:"love",s:"alias-change",d:"Parisian countess. Fernand's wife. Deep sadness. May recognize the Count."},{n:"Villefort",a:"NOW: Royal Prosecutor",g:"villain",s:"present",d:"Most powerful prosecutor in France."},{n:"Edmond Dantès",a:"Count of Monte Cristo — entering Paris",g:"protagonist",s:"present",d:"His enemies are right there, in luxury. None recognize him."},{n:"Albert de Morcerf",a:"Now you know his parents",g:"parisian",s:"present",d:"Son of Fernand and Mercédès. Think about that."}]},
+35:{t:"La Mazzolata",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Witnesses an execution. His reaction is complicated."}]},
+36:{t:"The Carnival at Rome",p:[{n:"Haydée",a:"Young Greek woman",g:"ally",s:"new",d:"Monte Cristo's companion. Daughter of Ali Pasha of Janina. File that name."},{n:"Valentine de Villefort",a:"Villefort's daughter",g:"parisian",s:"new",d:"Sweet, kind, close to grandfather Noirtier."}]},
+37:{t:"The Catacombs",p:[{n:"Noirtier de Villefort",a:"In person — paralyzed but sharp",g:"parisian",s:"present",d:"Paralyzed, mute, communicates through eyes. Mind intact. Protects Valentine."},{n:"Maximilian Morrel",a:"Captain — Morrel's son",g:"morrel",s:"new",d:"Honorable officer. Monte Cristo befriends him. Secretly loves Valentine."},{n:"Valentine de Villefort",a:"In love — secretly",g:"parisian",s:"present",d:"She and Maximilian meet in secret. Impossible love."}]},
+38:{t:"The Presentation",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Entering Parisian society. Every handshake is a chess move."},{n:"Albert de Morcerf",a:"The unwitting guide",g:"parisian",s:"present",d:"Introducing a weapon aimed at his own father."}]},
+39:{t:"The Guests",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Studies his enemies up close."},{n:"Danglars",a:"Baron Danglars",g:"suspicious",s:"present",d:"Already calculating how to profit."},{n:"Villefort",a:"Royal Prosecutor",g:"villain",s:"present",d:"Sees a curious foreigner. Nothing more."}]},
+40:{t:"Breakfast",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Deepening infiltration."},{n:"Maximilian Morrel",a:"Captain Morrel",g:"morrel",s:"present",d:"Monte Cristo recognizes Morrel's son. Genuine affection forms."}]},
+41:{t:"The Introduction",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Fully embedded. Access to all three enemies. The web is complete."},{n:"Fernand",a:"Count de Morcerf",g:"villain",s:"present",d:"Does not recognize Dantès."},{n:"Danglars",a:"Baron Danglars",g:"suspicious",s:"present",d:"Sees fortune and thinks 'opportunity.' He's being played."},{n:"Villefort",a:"Royal Prosecutor",g:"villain",s:"present",d:"Uneasy but doesn't suspect."},{n:"Mercédès",a:"Countess de Morcerf",g:"love",s:"present",d:"Something in her eyes when she looks at the Count."}]},
+42:{t:"Monsieur Bertuccio",p:[{n:"Bertuccio",a:"Monte Cristo's steward",g:"ally",s:"present",d:"Taken to the Auteuil house. The Count makes him confront the garden."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"He knows the house's secrets."}]},
+43:{t:"The House at Auteuil",p:[{n:"Bertuccio",a:"Confessing",g:"ally",s:"present",d:"Villefort buried something in the garden. Bertuccio stabbed him and opened the box."},{n:"Villefort",a:"His darkest secret",g:"villain",s:"referenced",d:"Buried a newborn baby alive — his illegitimate child."}]},
+44:{t:"The Vendetta",p:[{n:"Bertuccio",a:"The rescuer",g:"ally",s:"present",d:"Found the baby alive. Named Benedetto. The child became a criminal."},{n:"Benedetto",a:"The buried child",g:"minor",s:"referenced",d:"Villefort's son. Monte Cristo knows where he is. A loaded gun."}]},
+45:{t:"The Rain of Blood",p:[{n:"Bertuccio",a:"Finishing his story",g:"ally",s:"present",d:"Monte Cristo possesses him completely."}]},
+46:{t:"Unlimited Credit",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Opens unlimited credit with Danglars' bank."},{n:"Danglars",a:"Baron — seeing dollar signs",g:"villain",s:"present",d:"Greed defines him. Villain confirmed."}]},
+47:{t:"The Dappled Grays",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Saves Mme Danglars from runaway horses. Building social debts."},{n:"Mme Danglars",a:"The Baron's wife",g:"parisian",s:"new",d:"Grateful. Has her own secrets."}]},
+48:{t:"Ideology",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Visits the Villefort household."},{n:"Mme de Villefort",a:"Villefort's second wife",g:"neutral",s:"new",d:"Quiet, domestic. Attentive when certain topics come up."}]},
+49:{t:"Haydée",p:[{n:"Haydée",a:"Her story deepens",g:"ally",s:"present",d:"Her father was betrayed by a French officer. You might be connecting dots."}]},
+50:{t:"The Morrel Family",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Visits the Morrels. Rare genuine warmth."},{n:"Maximilian Morrel",a:"Captain Morrel",g:"morrel",s:"present",d:"Monte Cristo's fondness grows."}]},
+51:{t:"Pyramus and Thisbe",p:[{n:"Maximilian Morrel",a:"Secret lover",g:"morrel",s:"present",d:"Meets Valentine through the garden wall."},{n:"Valentine de Villefort",a:"Caught between worlds",g:"parisian",s:"present",d:"Pushed toward arranged marriage."}]},
+52:{t:"Toxicology",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Discusses poisons with Mme de Villefort. She's fascinated."},{n:"Mme de Villefort",a:"Very interested in poisons",g:"suspicious",s:"present",d:"Detailed questions about doses, methods, antidotes. Watch her."}]},
+53:{t:"Robert le Diable",p:[{n:"Haydée",a:"At the opera — stunning",g:"ally",s:"present",d:"Paris captivated. She recognizes someone in the audience."}]},
+54:{t:"A Rise in Stocks",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Begins financial war against Danglars."},{n:"Danglars",a:"Baron — in his element",g:"villain",s:"present",d:"Doesn't see the threat."}]},
+55:{t:"Major Cavalcanti",p:[{n:"'Major Cavalcanti'",a:"Placed by Monte Cristo",g:"suspicious",s:"new",d:"Something feels staged."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Positioning pieces."}]},
+56:{t:"Andrea Cavalcanti",p:[{n:"Andrea Cavalcanti",a:"Actually Benedetto",g:"suspicious",s:"new",d:"The baby Villefort buried, now a fake Italian prince. Monte Cristo's creation."},{n:"Edmond Dantès",a:"The puppeteer",g:"protagonist",s:"present",d:"Andrea is a weapon aimed at Villefort."}]},
+57:{t:"In the Lucerne Patch",p:[{n:"Maximilian Morrel",a:"Meeting Valentine",g:"morrel",s:"present",d:"Love deepens. Obstacles grow."},{n:"Valentine de Villefort",a:"Pressured",g:"parisian",s:"present",d:"Being pushed to marry Franz."}]},
+58:{t:"Monsieur Noirtier",p:[{n:"Noirtier",a:"Paralyzed but powerful",g:"parisian",s:"present",d:"Intense reaction to Franz. History between them."},{n:"Franz d'Épinay",a:"The proposed husband",g:"parisian",s:"present",d:"Something goes wrong in this meeting."}]},
+59:{t:"The Will",p:[{n:"Noirtier",a:"Taking action",g:"parisian",s:"present",d:"Disinherits Valentine to PROTECT her from the arranged marriage. Brilliant."},{n:"Valentine de Villefort",a:"Disinherited — but saved",g:"parisian",s:"present",d:"Understands what grandfather is doing."}]},
+60:{t:"The Telegraph",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Corrupts a telegraph operator. False news crashes Danglars' stocks."},{n:"Danglars",a:"Baron — losing money",g:"villain",s:"present",d:"Massive financial hit. First strike."}]},
+61:{t:"How to Get Rid of a Gardener",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Continuing the campaign."}]},
+62:{t:"Ghosts",p:[{n:"Villefort",a:"Haunted",g:"villain",s:"present",d:"The Auteuil house is eating at him."}]},
+63:{t:"The Dinner",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Mentions a skeleton in the garden. Villefort goes white. Mme Danglars reacts too."},{n:"Villefort",a:"Barely holding it together",g:"villain",s:"present",d:"His buried baby secret is surfacing."},{n:"Mme Danglars",a:"Also disturbed — why?",g:"suspicious",s:"present",d:"Connected to Villefort's secret."}]},
+64:{t:"The Beggar",p:[{n:"Caderousse",a:"Back — and greedy",g:"neutral",s:"present",d:"Recognizes Andrea as Benedetto. Plans to use it."},{n:"Andrea Cavalcanti",a:"Benedetto — cornered",g:"suspicious",s:"present",d:"His cover is threatened."}]},
+65:{t:"A Conjugal Scene",p:[{n:"Danglars",a:"Baron — fighting",g:"villain",s:"present",d:"Marriage trouble."},{n:"Mme Danglars",a:"More than she seems",g:"parisian",s:"present",d:"Complicated past with Villefort."}]},
+66:{t:"Matrimonial Projects",p:[{n:"Danglars",a:"Baron — social climber",g:"villain",s:"present",d:"Pushing Eugénie to marry Andrea."},{n:"Eugénie Danglars",a:"The reluctant bride",g:"parisian",s:"new",d:"Independent-minded. Being used as a pawn."}]},
+67:{t:"The Prosecutor's Office",p:[{n:"Villefort",a:"Under pressure",g:"villain",s:"present",d:"Professional and personal worlds colliding."}]},
+68:{t:"A Summer Ball",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Observing everyone."},{n:"Mercédès",a:"Countess de Morcerf",g:"love",s:"present",d:"Recognition in her eyes?"}]},
+69:{t:"Information",p:[{n:"Beauchamp",a:"Journalist — Albert's friend",g:"parisian",s:"new",d:"Picked up a story about Janina. Doesn't know it's about Albert's father yet."}]},
+70:{t:"The Ball",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"All pieces in place. Three acts of revenge about to begin."}]},
+71:{t:"Bread and Salt",p:[{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Shares bread and salt with Morcerf — marking the boundary between personal and justice."}]},
+72:{t:"Madame de Saint-Méran",p:[{n:"Mme de Saint-Méran",a:"Villefort's mother-in-law",g:"minor",s:"new",d:"Falls ill. Dies. Then her husband dies. Something very wrong in this household."},{n:"Villefort",a:"Now a victim too?",g:"villain",s:"present",d:"Poison suspected in his own home."}]},
+73:{t:"The Promise",p:[{n:"Maximilian Morrel",a:"Desperate",g:"morrel",s:"present",d:"Begs Monte Cristo to save Valentine."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Promises to protect Valentine. Complicates the revenge."}]},
+74:{t:"The Villefort Crypt",p:[{n:"Villefort",a:"Investigating",g:"villain",s:"present",d:"Suspects poison in his own household."}]},
+75:{t:"A Signed Statement",p:[{n:"Noirtier",a:"Key witness",g:"parisian",s:"present",d:"Reveals he killed Franz's father in a duel. Ends the engagement. Saves Valentine again."},{n:"Franz d'Épinay",a:"Engagement off",g:"parisian",s:"present",d:"Cannot marry into the family of his father's killer. Exits."}]},
+76:{t:"Cavalcanti Junior",p:[{n:"Andrea Cavalcanti",a:"Benedetto — rising",g:"suspicious",s:"present",d:"Living the high life. But Caderousse knows who he is."}]},
+77:{t:"Haydée",p:[{n:"Haydée",a:"Full story — devastating",g:"ally",s:"present",d:"Her father betrayed by a French officer — Fernand. Monte Cristo's weapon against Morcerf."}]},
+78:{t:"From Janina",p:[{n:"Fernand",a:"Morcerf — walls closing in",g:"villain",s:"present",d:"The Ali Pasha investigation begins."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"He planted this."}]},
+79:{t:"The Lemonade",p:[{n:"Valentine de Villefort",a:"Now a target?",g:"parisian",s:"present",d:"Poisoned. But survives — Noirtier's brucine medicine gave her resistance."},{n:"Noirtier",a:"Unknowing protector",g:"parisian",s:"present",d:"Years of brucine protected Valentine."}]},
+80:{t:"The Accusation",p:[{n:"Fernand",a:"Morcerf — accused",g:"villain",s:"present",d:"Formally accused before the Senate."}]},
+81:{t:"The Retired Baker",p:[{n:"Caderousse",a:"Planning robbery",g:"neutral",s:"present",d:"Plans to rob Monte Cristo."},{n:"Andrea Cavalcanti",a:"Returning to crime",g:"suspicious",s:"present",d:"Agrees to help rob the Count."}]},
+82:{t:"The Break-in",p:[{n:"Caderousse",a:"Caught",g:"neutral",s:"present",d:"Breaks in. Gets caught."},{n:"Andrea Cavalcanti",a:"Benedetto — murderer",g:"villain",s:"reveal",d:"Stabs Caderousse. True nature revealed."}]},
+83:{t:"The Hand of God",p:[{n:"Caderousse",a:"Dying",g:"neutral",s:"death",d:"Mortally wounded. Monte Cristo appears as Busoni. Caderousse signs a statement naming his killer."},{n:"Edmond Dantès",a:"As Abbé Busoni — one last time",g:"protagonist",s:"present",d:"Justice, mercy, and vengeance in one scene."}]},
+84:{t:"Beauchamp",p:[{n:"Beauchamp",a:"Investigating",g:"parisian",s:"present",d:"Confirmed Janina story is about Morcerf. Warns Albert."},{n:"Albert de Morcerf",a:"Learning the truth",g:"parisian",s:"present",d:"His world is cracking."}]},
+85:{t:"The Journey",p:[{n:"Albert de Morcerf",a:"Investigating",g:"parisian",s:"present",d:"Trying to clear his father's name. He won't be able to."}]},
+86:{t:"The Trial",p:[{n:"Fernand",a:"Morcerf — on trial",g:"villain",s:"present",d:"Faces the Senate inquiry."},{n:"Haydée",a:"Star witness",g:"ally",s:"present",d:"Testifies. Identifies Morcerf as her father's betrayer. Devastating."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Not in the courtroom — but entirely his doing."}]},
+87:{t:"Provocation",p:[{n:"Albert de Morcerf",a:"Enraged",g:"parisian",s:"present",d:"Publicly insults the Count to provoke a duel."}]},
+88:{t:"The Insult",p:[{n:"Albert de Morcerf",a:"Challenging the Count",g:"parisian",s:"present",d:"Formally challenges Monte Cristo."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Accepts. Intends to kill Albert. Revenge and conscience collide."}]},
+89:{t:"A Nocturnal Interview",p:[{n:"Mercédès",a:"Countess — she knows",g:"love",s:"reveal",d:"Goes to Monte Cristo's house. She KNOWS he is Edmond. Begs him to spare Albert. She calls him Edmond."},{n:"Edmond Dantès",a:"Edmond — for a moment",g:"protagonist",s:"present",d:"Mercédès says his name and everything breaks. He chooses to let Albert live."}]},
+90:{t:"The Meeting",p:[{n:"Albert de Morcerf",a:"Choosing honor",g:"parisian",s:"present",d:"Publicly apologizes instead of fighting. His mother told him the truth."},{n:"Edmond Dantès",a:"Spared",g:"protagonist",s:"present",d:"Albert's apology saves both their lives."}]},
+91:{t:"Mother and Son",p:[{n:"Mercédès",a:"Leaving everything",g:"love",s:"present",d:"She and Albert leave Fernand. No title, no fortune. Poverty and dignity."},{n:"Albert de Morcerf",a:"Choosing his mother",g:"parisian",s:"present",d:"Renounces everything. Becomes admirable."}]},
+92:{t:"The Suicide",p:[{n:"Fernand",a:"Morcerf — the end",g:"villain",s:"death",d:"Exposed, abandoned. Discovers Monte Cristo IS Dantès. Kills himself. First villain destroyed."}]},
+93:{t:"Valentine",p:[{n:"Valentine de Villefort",a:"Poisoned again",g:"parisian",s:"present",d:"The poisoner is accelerating."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Working behind the scenes to protect Valentine."}]},
+94:{t:"Maximilian's Disclosure",p:[{n:"Maximilian Morrel",a:"Terrified",g:"morrel",s:"present",d:"Begs Monte Cristo for help."}]},
+95:{t:"Father and Daughter",p:[{n:"Villefort",a:"Discovering truth about his wife",g:"villain",s:"present",d:"Suspects his own wife."},{n:"Mme de Villefort",a:"The poisoner — revealed",g:"villain",s:"reveal",d:"Poisoning for inheritance. Used what Monte Cristo taught her."}]},
+96:{t:"The Marriage Contract",p:[{n:"Andrea Cavalcanti",a:"Arrested",g:"villain",s:"present",d:"Police arrive during the signing. Fake prince collapses."},{n:"Danglars",a:"Baron — humiliated",g:"villain",s:"present",d:"Fiancé arrested as a murderer. Public humiliation."}]},
+97:{t:"The Route to Belgium",p:[{n:"Eugénie Danglars",a:"Escaping",g:"parisian",s:"present",d:"Flees Paris. Done being a pawn."},{n:"Andrea Cavalcanti",a:"Benedetto — on the run",g:"villain",s:"present",d:"Back to running."}]},
+98:{t:"The Bell and Bottle Inn",p:[{n:"Andrea Cavalcanti",a:"Captured",g:"villain",s:"present",d:"Caught. His trial will be spectacular."}]},
+99:{t:"The Law",p:[{n:"Villefort",a:"Must prosecute",g:"villain",s:"present",d:"Doesn't know who this young man really is."}]},
+100:{t:"The Apparition",p:[{n:"Valentine de Villefort",a:"Seeing the Count",g:"parisian",s:"present",d:"Monte Cristo visits secretly. Gives her a pill that will fake death."},{n:"Edmond Dantès",a:"The protector",g:"protagonist",s:"present",d:"She must trust him completely."}]},
+101:{t:"Locusta",p:[{n:"Mme de Villefort",a:"Escalating",g:"villain",s:"present",d:"Prepares another dose for Valentine."}]},
+102:{t:"Valentine",p:[{n:"Valentine de Villefort",a:"Apparently dead",g:"parisian",s:"present",d:"Takes the pill. Everyone believes she's dead."},{n:"Maximilian Morrel",a:"Devastated",g:"morrel",s:"present",d:"Wants to die."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Promises: wait three days."}]},
+103:{t:"Maximilian",p:[{n:"Maximilian Morrel",a:"Three days of agony",g:"morrel",s:"present",d:"Counting down."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Valentine is safe. Villefort's reckoning is coming."}]},
+104:{t:"Danglars' Signature",p:[{n:"Danglars",a:"Baron — hemorrhaging money",g:"villain",s:"present",d:"Fortune evaporating."},{n:"Edmond Dantès",a:"Count of Monte Cristo",g:"protagonist",s:"present",d:"Methodical financial destruction."}]},
+105:{t:"Père-Lachaise",p:[{n:"Valentine",a:"Buried — but alive",g:"parisian",s:"present",d:"All Paris mourns. Only Monte Cristo knows."}]},
+106:{t:"Division of Fortune",p:[{n:"Danglars",a:"Baron — planning to flee",g:"villain",s:"present",d:"Ruined. Plans to steal clients' money and run."}]},
+107:{t:"The Lions' Den",p:[{n:"Andrea Cavalcanti",a:"On trial",g:"villain",s:"present",d:"Surprisingly calm. Has a bombshell."}]},
+108:{t:"The Judge",p:[{n:"Villefort",a:"About to be destroyed",g:"villain",s:"present",d:"Prosecuting Benedetto. Doesn't know what's coming."}]},
+109:{t:"The Assize Court",p:[{n:"Andrea Cavalcanti",a:"NOW: Villefort's son",g:"villain",s:"reveal",d:"Reveals in court: he is Villefort's illegitimate son. The buried baby. Courtroom erupts."},{n:"Villefort",a:"Destroyed in his own courtroom",g:"villain",s:"present",d:"Every secret exposed. Staggers out broken."},{n:"Mme Danglars",a:"Exposed as Benedetto's mother",g:"parisian",s:"present",d:"The affair, the baby — all public."}]},
+110:{t:"The Indictment",p:[{n:"Villefort",a:"Racing home",g:"villain",s:"present",d:"Confronts his wife about the poisonings."},{n:"Mme de Villefort",a:"Confronted",g:"villain",s:"present",d:"She has one option. She takes it."}]},
+111:{t:"Expiation",p:[{n:"Mme de Villefort",a:"Dead",g:"villain",s:"death",d:"Poisons herself and her son."},{n:"Villefort",a:"Gone mad",g:"villain",s:"present",d:"Finds their bodies. Mind breaks. Crawls to the garden to dig."},{n:"Edmond Dantès",a:"Revealing himself",g:"protagonist",s:"reveal",d:"'I am Edmond Dantès.' But the dead child haunts him. Did he go too far?"}]},
+112:{t:"Departure",p:[{n:"Edmond Dantès",a:"Doubting",g:"protagonist",s:"present",d:"Revenge complete. But has he become what he hated?"},{n:"Maximilian Morrel",a:"Ready to die",g:"morrel",s:"present",d:"Three days are up."}]},
+113:{t:"The Past",p:[{n:"Mercédès",a:"In the old house",g:"love",s:"present",d:"Returned to Marseilles with nothing."},{n:"Edmond Dantès",a:"One last time with Mercédès",g:"protagonist",s:"present",d:"Their final conversation. She knew all along."}]},
+114:{t:"Peppino",p:[{n:"Danglars",a:"Fleeing with stolen money",g:"villain",s:"present",d:"Heading for Italy. Vampa's bandits are waiting."},{n:"Luigi Vampa",a:"One last job",g:"minor",s:"present",d:"Captures Danglars."}]},
+115:{t:"Luigi Vampa's Bill of Fare",p:[{n:"Danglars",a:"Baron — starving",g:"villain",s:"present",d:"100,000 francs for a chicken. The greedy man's perfect torture."}]},
+116:{t:"The Fifth of October",p:[{n:"Edmond Dantès",a:"The final revelation",g:"protagonist",s:"present",d:"Reveals Valentine is alive. Reunites her with Maximilian."},{n:"Maximilian Morrel",a:"Reunited",g:"morrel",s:"present",d:"She's alive. Monte Cristo kept his promise."},{n:"Valentine de Villefort",a:"Alive — free",g:"parisian",s:"present",d:"Saved. Reunited."}]},
+117:{t:"The Departure",p:[{n:"Edmond Dantès",a:"Departing",g:"protagonist",s:"present",d:"Reveals himself to Danglars. Sails away with Haydée. 'Wait and Hope.'"},{n:"Danglars",a:"Ruined — but alive",g:"villain",s:"present",d:"Shown mercy. His sin was greed, not malice."},{n:"Haydée",a:"Free — and in love",g:"ally",s:"present",d:"They sail into the sunrise."},{n:"Maximilian Morrel",a:"Monte Cristo's heir",g:"morrel",s:"present",d:"Inherits the island and fortune."}]}
+};
+
+// ===== VIEW SWITCHING =====
+function switchView(v,btn){
+  currentView=v;
+  document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  btn.classList.add('active');
+  if(v==='chapters') renderSubPips();
+  if(v==='cards') renderCards();
+  if(v==='relationships') renderRelMap();
+}
+
+// ===== GLOBAL CHAPTER CONTROL =====
+function setReaderChapter(n){
+  readerCh=Math.max(1,Math.min(117,n));
+  document.getElementById('globalNum').textContent=readerCh;
+  // Find highest chapter title <= readerCh
+  let title='';
+  for(let i=readerCh;i>=1;i--) if(D[i]){title=D[i].t;break;}
+  document.getElementById('globalTitle').textContent=title;
+  // Update global pips
+  document.querySelectorAll('.global-pip').forEach((p,i)=>{
+    p.classList.toggle('active',i+1===readerCh);
+  });
+  // Cap sub-chapter
+  if(subCh>readerCh){subCh=readerCh;}
+  // Refresh current view
+  if(currentView==='chapters'){renderSubPips();renderSubChapter();}
+  if(currentView==='cards') renderCards();
+  if(currentView==='relationships') renderRelMap();
+}
+
+function initGlobalPips(){
+  let h='';
+  for(let i=1;i<=117;i++){
+    const m=majorCh.includes(i)?' major':'';
+    const a=i===readerCh?' active':'';
+    h+=`<div class="global-pip${m}${a}" onclick="setReaderChapter(${i})" title="Chapter ${i}"></div>`;
+  }
+  document.getElementById('globalPips').innerHTML=h;
+}
+
+// ===== SUB-CHAPTER (Chapter Guide nav) =====
+function renderSubPips(){
+  let h='';
+  for(let i=1;i<=117;i++){
+    const m=majorCh.includes(i)?' major':'';
+    const a=i===subCh?' active':'';
+    const locked=i>readerCh?' locked':'';
+    h+=`<div class="sub-pip${m}${a}${locked}" onclick="${i<=readerCh?'goSubCh('+i+')':''}" title="Chapter ${i}${i>readerCh?' (locked)':''}"></div>`;
+  }
+  document.getElementById('subPips').innerHTML=h;
+}
+
+function goSubCh(n){subCh=Math.max(1,Math.min(readerCh,n));renderSubChapter();}
+function changeSubCh(d){goSubCh(subCh+d);}
+
+function renderSubChapter(){
+  const n=subCh;
+  document.getElementById('subChNum').textContent=n;
+  document.querySelectorAll('.sub-pip').forEach((p,i)=>p.classList.toggle('active',i+1===n));
+
+  const state=getStoryState(n);
+  let sh='<div class="ch-sofar"><div class="ch-sofar-label">What you know so far</div>'+state.summary;
+  if(state.ids.length>1){
+    sh+='<div class="ch-sofar-identities">';
+    for(const id of state.ids) sh+=`<span class="ch-sofar-id">${id}</span>`;
+    sh+='</div>';
+  }
+  sh+='</div>';
+  document.getElementById('chSoFar').innerHTML=sh;
+
+  const data=D[n];
+  const ce=document.getElementById('chContent');
+  const te=document.getElementById('subChTitle');
+  if(!data){te.textContent='';ce.innerHTML='<div class="ch-empty">This chapter continues ongoing events.</div>';return;}
+  te.textContent=data.t;
+  let h=`<div class="ch-scene-header">Chapter ${n}: ${data.t}</div>`;
+  for(const p of data.p){
+    const sl={new:'First Appearance',present:'Present','alias-change':'New Identity',referenced:'Referenced',death:'Death',reveal:'Revealed'}[p.s]||p.s;
+    h+=`<div class="ch-person"><div class="ch-person-dot" style="background:${C[p.g]||'#888'}"></div><div class="ch-person-info"><div class="ch-person-name">${p.n}</div><div class="ch-person-aka">${p.a}</div><div class="ch-person-role">${p.d}</div></div><div class="ch-person-status ${p.s}">${sl}</div></div>`;
+  }
+  ce.innerHTML=h;
+}
+
+// ===== CHARACTER CARDS =====
+function getCharTier(ch, maxCh){
+  let best=null;
+  for(const t of ch.tiers) if(t[0]<=maxCh) best=t;
+  return best;
+}
+
+function renderCards(){
+  const mc=readerCh;
+  // Build filter bar
+  const cats=new Map();
+  cats.set('all',0);
+  for(const[id,ch] of Object.entries(chars)){
+    if(ch.first>mc) continue;
+    const tier=getCharTier(ch,mc);if(!tier) continue;
+    const cat=g2cat[tier[1]]||'other';
+    cats.set(cat,(cats.get(cat)||0)+1);
+  }
+  const catNames={all:'All',protagonist:'Protagonist',villain:'Antagonists',ally:'Allies','morrel-family':'Morrel Family',parisian:'Paris Society',other:'Other'};
+  let fh='';
+  for(const[cat,label] of Object.entries(catNames)){
+    if(cat!=='all'&&!cats.has(cat)) continue;
+    const a=currentFilter===cat?' active':'';
+    fh+=`<button class="filter-btn${a}" onclick="filterCards('${cat}',this)">${label}</button>`;
+  }
+  document.getElementById('filterBar').innerHTML=fh;
+
+  // Build cards
+  let h='';
+  for(const[id,ch] of Object.entries(chars)){
+    if(ch.first>mc) continue;
+    const tier=getCharTier(ch,mc);if(!tier) continue;
+    const cat=g2cat[tier[1]]||'other';
+    const show=currentFilter==='all'||currentFilter===cat;
+    const aliases=ch.aliases.filter(a=>a[0]<=mc);
+    const conns=ch.conns.filter(c=>c[2]<=mc && chars[c[0]] && chars[c[0]].first<=mc);
+
+    h+=`<div class="card ${cat}" data-cat="${cat}" style="display:${show?'block':'none'}">`;
+    h+=`<div class="card-header"><span class="original-name">${ch.n}</span><span class="role-badge">${tier[2]}</span></div>`;
+    if(aliases.length){
+      h+=`<div class="aliases"><div class="aliases-label">Identities</div>`;
+      for(const a of aliases) h+=`<span class="alias-tag">${a[1]} <span class="ch">Ch ${a[0]}</span></span>`;
+      h+=`</div>`;
+    }
+    h+=`<div class="description">${tier[3]}</div>`;
+    if(conns.length){
+      h+=`<div class="connections"><div class="conn-label">Connections</div>`;
+      for(const c of conns){
+        const target=chars[c[0]];
+        h+=`<div class="conn-item"><em>${target.n}</em> — ${c[3]}</div>`;
+      }
+      h+=`</div>`;
+    }
+    h+=`</div>`;
+  }
+  document.getElementById('cardGrid').innerHTML=h;
+}
+
+function filterCards(cat,btn){
+  currentFilter=cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(c=>{
+    c.style.display=(cat==='all'||c.dataset.cat===cat)?'block':'none';
+  });
+}
+
+// ===== RELATIONSHIP MAP =====
+function renderRelMap(){
+  const mc=readerCh;
+  const svg=document.getElementById('relSvg');
+
+  // SVG Filters — glow effects for nodes, lines, and protagonist pulse
+  let h=`<defs>
+    <filter id="nodeGlow"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="lineGlow" filterUnits="userSpaceOnUse" x="0" y="0" width="1000" height="700"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="protaGlow"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="bgVignette" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="rgba(212,175,55,.03)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+  </defs>`;
+
+  // Subtle background vignette
+  h+=`<rect x="0" y="0" width="1000" height="700" fill="url(#bgVignette)"/>`;
+
+  // Visible characters
+  const visible=new Set();
+  for(const[id,ch] of Object.entries(chars)){
+    if(relPos[id] && ch.first<=mc) visible.add(id);
+  }
+
+  // Connection lines — with draw-in animation
+  const relColors={betrayal:'#e74c3c',family:'#5dade2',love:'#58d68d',ally:'#d4af37'};
+  h+='<g id="relConns">';
+  let lineIdx=0;
+  for(const r of rels){
+    if(r[3]>mc) continue;
+    if(!visible.has(r[0])||!visible.has(r[1])) continue;
+    const p1=relPos[r[0]],p2=relPos[r[1]];
+    const col=relColors[r[2]]||'#888';
+    const dx=p2[0]-p1[0],dy=p2[1]-p1[1];
+    const len=Math.sqrt(dx*dx+dy*dy);
+    const isBetrayal=r[2]==='betrayal';
+    const sw=isBetrayal?2:1.5;
+    // Draw-in: start with dashoffset = length, animate to 0
+    const delay=(lineIdx*0.04).toFixed(2);
+    h+=`<line class="rel-conn${isBetrayal?' betrayal-flow':''}" data-from="${r[0]}" data-to="${r[1]}" x1="${p1[0]}" y1="${p1[1]}" x2="${p2[0]}" y2="${p2[1]}" stroke="${col}" stroke-width="${sw}" opacity=".5" stroke-linecap="round"${isBetrayal?' stroke-dasharray="6,4"':` stroke-dasharray="${len}" stroke-dashoffset="${len}"`} style="${isBetrayal?'':`--len:${len};animation:drawLine .7s ease-out ${delay}s forwards`}"/>`;
+    lineIdx++;
+  }
+  h+='</g>';
+
+  // Character nodes — with staggered fade-in
+  h+='<g id="relNodes">';
+  let nodeIdx=0;
+  for(const[id,pos] of Object.entries(relPos)){
+    if(!visible.has(id)) continue;
+    const ch=chars[id];
+    const tier=getCharTier(ch,mc);if(!tier) continue;
+    const col=C[tier[1]]||'#888';
+    const r=pos[2];
+    const isProt=tier[1]==='protagonist';
+
+    // Split long names
+    const lines=[];
+    if(ch.n.length>14){
+      const parts=ch.n.split(' ');
+      const mid=Math.ceil(parts.length/2);
+      lines.push(parts.slice(0,mid).join(' '));
+      lines.push(parts.slice(mid).join(' '));
+    } else {
+      lines.push(ch.n.split(' ').pop());
+    }
+    const fs=Math.min(10,Math.max(7,r*0.45));
+    const delay=(0.15+nodeIdx*0.05).toFixed(2);
+
+    h+=`<g class="rel-node appear" data-id="${id}" onclick="selectNode('${id}')" style="animation-delay:${delay}s;transform-origin:${pos[0]}px ${pos[1]}px">`;
+
+    // Protagonist ambient pulse ring
+    if(isProt){
+      h+=`<circle cx="${pos[0]}" cy="${pos[1]}" r="${r}" fill="none" stroke="${col}" stroke-width="1" opacity=".15">
+        <animate attributeName="r" values="${r};${r+12};${r}" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".15;.04;.15" dur="3s" repeatCount="indefinite"/>
+      </circle>`;
+      h+=`<circle cx="${pos[0]}" cy="${pos[1]}" r="${r}" fill="none" stroke="${col}" stroke-width=".5" opacity=".08">
+        <animate attributeName="r" values="${r};${r+22};${r}" dur="4s" begin="1s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values=".08;.01;.08" dur="4s" begin="1s" repeatCount="indefinite"/>
+      </circle>`;
+    }
+
+    // Main circle — subtle radial gradient fill
+    h+=`<circle cx="${pos[0]}" cy="${pos[1]}" r="${r}" fill="#1a1a22" stroke="${col}" stroke-width="2"${isProt?' filter="url(#protaGlow)"':''}/>`;
+    // Inner glow circle
+    h+=`<circle cx="${pos[0]}" cy="${pos[1]}" r="${r-2}" fill="none" stroke="${col}" stroke-width=".5" opacity=".15"/>`;
+
+    if(lines.length===1){
+      h+=`<text x="${pos[0]}" y="${pos[1]+fs/3}" text-anchor="middle" font-family="Playfair Display,serif" font-size="${fs}" fill="${col}" font-weight="700">${lines[0]}</text>`;
+    } else {
+      h+=`<text x="${pos[0]}" y="${pos[1]-fs/3}" text-anchor="middle" font-family="Playfair Display,serif" font-size="${fs}" fill="${col}" font-weight="700">${lines[0]}</text>`;
+      h+=`<text x="${pos[0]}" y="${pos[1]+fs}" text-anchor="middle" font-family="Playfair Display,serif" font-size="${fs}" fill="${col}" font-weight="700">${lines[1]}</text>`;
+    }
+    h+=`</g>`;
+
+    // Alias annotation with fade
+    const aliases=ch.aliases.filter(a=>a[0]<=mc);
+    if(aliases.length){
+      const latest=aliases[aliases.length-1];
+      h+=`<text x="${pos[0]}" y="${pos[1]+r+14}" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" fill="#888" pointer-events="none" opacity="0" style="animation:nodeAppear .4s ease-out ${(parseFloat(delay)+.2).toFixed(2)}s forwards">\u2192 ${latest[1]}</text>`;
+    }
+    nodeIdx++;
+  }
+  h+='</g>';
+
+  svg.innerHTML=h;
+  deselectNode();
+
+  // After draw-in animations finish, strip animation styles so they don't fight highlighting
+  setTimeout(()=>{
+    document.querySelectorAll('.rel-conn:not(.betrayal-flow)').forEach(c=>{
+      c.style.animation='';
+      c.setAttribute('stroke-dashoffset','0');
+    });
+    document.querySelectorAll('.rel-node.appear').forEach(n=>{
+      n.style.animation='';n.style.opacity='1';n.classList.remove('appear');
+    });
+  },1200);
+}
+
+function selectNode(id){
+  if(selectedNode===id){deselectNode();return;}
+  selectedNode=id;
+  const ch=chars[id];if(!ch) return;
+  const mc=readerCh;
+  const tier=getCharTier(ch,mc);
+  const col=tier?C[tier[1]]||'#888':'#888';
+
+  // Remove old radiate rings
+  document.querySelectorAll('.radiate-ring').forEach(r=>r.remove());
+
+  // Build set of connected IDs
+  const connIds=new Set([id]);
+  document.querySelectorAll('.rel-conn').forEach(c=>{
+    const f=c.dataset.from,t=c.dataset.to;
+    if(f===id||t===id) connIds.add(f===id?t:f);
+  });
+
+  // Highlight connections — direct attribute manipulation, no CSS class fights
+  document.querySelectorAll('.rel-conn').forEach(c=>{
+    const f=c.dataset.from,t=c.dataset.to;
+    if(f===id||t===id){
+      c.setAttribute('opacity','1');
+      c.setAttribute('stroke-width','3.5');
+      c.setAttribute('filter','url(#lineGlow)');
+      // Solidify betrayal dashes for visual punch
+      if(c.classList.contains('betrayal-flow')){
+        c.style.animation='none';
+        c.setAttribute('stroke-dasharray','');
+      }
+    } else {
+      c.setAttribute('opacity','.04');
+      c.setAttribute('stroke-width','1');
+      c.removeAttribute('filter');
+      if(c.classList.contains('betrayal-flow')) c.style.animation='none';
+    }
+  });
+
+  // Highlight nodes
+  document.querySelectorAll('.rel-node').forEach(n=>{
+    const nid=n.dataset.id;
+    if(connIds.has(nid)){
+      n.style.opacity='1';
+      if(nid===id){
+        const circ=n.querySelector('circle');
+        if(circ){circ.setAttribute('stroke-width','4');circ.setAttribute('filter','url(#nodeGlow)');}
+      }
+    } else {
+      n.style.opacity='.08';
+    }
+  });
+
+  // Radiating ring on selected node
+  const pos=relPos[id];
+  if(pos){
+    const svgNS='http://www.w3.org/2000/svg';
+    const ring=document.createElementNS(svgNS,'circle');
+    ring.setAttribute('cx',pos[0]);ring.setAttribute('cy',pos[1]);ring.setAttribute('r',pos[2]);
+    ring.setAttribute('fill','none');ring.setAttribute('stroke',col);ring.setAttribute('stroke-width','2');
+    ring.setAttribute('opacity','0.5');ring.classList.add('radiate-ring');
+    const aR=document.createElementNS(svgNS,'animate');
+    aR.setAttribute('attributeName','r');aR.setAttribute('values',`${pos[2]};${pos[2]+30}`);
+    aR.setAttribute('dur','0.6s');aR.setAttribute('fill','freeze');
+    const aO=document.createElementNS(svgNS,'animate');
+    aO.setAttribute('attributeName','opacity');aO.setAttribute('values','0.5;0');
+    aO.setAttribute('dur','0.6s');aO.setAttribute('fill','freeze');
+    ring.appendChild(aR);ring.appendChild(aO);
+    document.getElementById('relSvg').appendChild(ring);
+  }
+
+  // Detail panel
+  document.getElementById('rdName').textContent=ch.n;
+  const aliases=ch.aliases.filter(a=>a[0]<=mc).map(a=>a[1]);
+  document.getElementById('rdAka').textContent=aliases.join(' · ')||'';
+  document.getElementById('rdDesc').textContent=tier?tier[3]:'';
+
+  const conns=ch.conns.filter(c=>c[2]<=mc && chars[c[0]] && chars[c[0]].first<=mc);
+  let chtml='';
+  for(const c of conns){
+    const tc={betrayal:'t-betrayal',family:'t-family',love:'t-love',ally:'t-ally'}[c[1]]||'t-ally';
+    const tl={betrayal:'Betrayal',family:'Family',love:'Love',ally:'Alliance'}[c[1]]||c[1];
+    chtml+=`<div class="rel-detail-conn"><em>${chars[c[0]].n}</em> <span class="rel-conn-type ${tc}">${tl}</span><br><span style="color:#777">${c[3]}</span></div>`;
+  }
+  document.getElementById('rdConns').innerHTML=chtml;
+  document.getElementById('relDetail').classList.add('visible');
+}
+
+function deselectNode(){
+  selectedNode=null;
+  // Restore all connections to default state
+  document.querySelectorAll('.rel-conn').forEach(c=>{
+    c.setAttribute('opacity','.5');
+    c.setAttribute('stroke-width',c.classList.contains('betrayal-flow')?'2':'1.5');
+    c.removeAttribute('filter');
+    if(c.classList.contains('betrayal-flow')){
+      c.setAttribute('stroke-dasharray','6,4');
+      c.style.animation='';  // re-enable flow
+    }
+  });
+  // Restore all nodes
+  document.querySelectorAll('.rel-node').forEach(n=>{
+    n.style.opacity='1';
+    n.querySelectorAll('circle').forEach(circ=>{
+      circ.removeAttribute('filter');
+    });
+  });
+  document.querySelectorAll('.radiate-ring').forEach(r=>r.remove());
+  document.getElementById('relDetail').classList.remove('visible');
+}
+
+// ===== KEYBOARD =====
+document.addEventListener('click',e=>{
+  if(!selectedNode) return;
+  // Don't deselect if clicking inside the SVG nodes or detail panel
+  if(e.target.closest('.rel-node')||e.target.closest('.rel-detail')||e.target.closest('[data-id]')) return;
+  deselectNode();
+});
+document.addEventListener('keydown',e=>{
+  if(currentView==='chapters'){
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();changeSubCh(1);}
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();changeSubCh(-1);}
+  }
+  if(e.key==='Escape') deselectNode();
+});
+
+// ===== INIT =====
+initGlobalPips();
+setReaderChapter(41);
+subCh=1;
+renderSubPips();
+renderSubChapter();
+</script>
+</body>
+</html>
