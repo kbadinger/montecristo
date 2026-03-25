@@ -161,9 +161,61 @@
   .t-ally{background:rgba(212,175,55,.15);color:#d4af37}
 
   .footer{text-align:center;margin-top:2rem;font-size:.72rem;color:#444;font-style:italic;font-family:'Playfair Display',serif}
+  /* Tablet */
   @media(max-width:800px){
-    .grid{grid-template-columns:1fr}body{padding:1rem}h1{font-size:1.7rem}
+    body{padding:1rem 1rem 3rem}
+    h1{font-size:1.7rem}
+    .grid{grid-template-columns:1fr;gap:1rem}
+    .card{padding:1rem}
     .rel-detail{right:.5rem;left:.5rem;width:auto;top:auto;bottom:1rem;transform:none;max-height:50vh}
+    .rel-detail.visible{transform:none}
+  }
+
+  /* Mobile */
+  @media(max-width:480px){
+    body{padding:.75rem .75rem 3rem}
+    h1{font-size:1.4rem}
+    .subtitle{font-size:.78rem;margin-bottom:.75rem}
+
+    /* Chapter selector */
+    .global-ch{padding:.8rem 1rem;border-radius:10px;margin-bottom:1rem}
+    .global-ch-num{font-size:2rem}
+    .global-ch-row button{width:40px;height:40px;font-size:1.2rem}
+    .global-pips{gap:3px}
+    .global-pip{width:10px;height:10px}
+
+    /* View toggle — icons only on small screens */
+    .view-toggle{padding:3px;margin-bottom:1rem;border-radius:10px}
+    .view-btn{padding:.5rem .4rem;font-size:.72rem;gap:.25rem}
+    .view-btn svg{width:16px;height:16px}
+
+    /* Chapter explorer */
+    .ch-slider-wrap{padding:.8rem 1rem;border-radius:10px}
+    .ch-slider-row button{width:40px;height:40px}
+    .sub-ch-num{font-size:1.5rem}
+    .sub-pips{gap:3px}
+    .sub-pip{width:10px;height:10px}
+    .ch-sofar{padding:.6rem .8rem;font-size:.75rem}
+    .ch-person{padding:.7rem .8rem;gap:.6rem;border-radius:8px}
+    .ch-person-name{font-size:.9rem}
+    .ch-person-role{font-size:.72rem}
+
+    /* Cards */
+    .grid{grid-template-columns:1fr;gap:.8rem;max-width:100%}
+    .card{padding:1rem;border-radius:10px}
+    .original-name{font-size:1.05rem}
+    .description{font-size:.75rem}
+    .filter-bar{gap:.3rem;margin-bottom:1rem}
+    .filter-btn{padding:.3rem .6rem;font-size:.7rem}
+
+    /* Relationships */
+    .rel-legend{gap:.6rem;font-size:.65rem;margin-bottom:.6rem}
+    .rel-click-hint{font-size:.7rem;margin-bottom:.5rem}
+    .rel-detail{right:0;left:0;bottom:0;width:100%;max-height:55vh;border-radius:14px 14px 0 0;padding:1.2rem 1rem}
+    .rel-detail.visible{transform:none}
+    .rel-detail-name{font-size:1.05rem}
+
+    .footer{margin-top:1.5rem;font-size:.65rem}
   }
 </style>
 </head>
